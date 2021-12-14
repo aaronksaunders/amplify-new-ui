@@ -40,7 +40,6 @@ applyPolyfills().then(() => {
 });
 
 router.isReady().then(() => {
-  app.config.isCustomElement = (tag) => tag.startsWith('amplify-');
   app.use(pina).mount('#app');
 });
 
