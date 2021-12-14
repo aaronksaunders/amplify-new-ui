@@ -1,0 +1,7 @@
+{
+  "name": "amplify-new-ui",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue"
+}
