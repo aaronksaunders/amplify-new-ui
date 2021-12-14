@@ -8,6 +8,10 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/home'
   },
   {
+    path: '/logout',
+    redirect: '/home?logout'
+  },
+  {
     path: '/home',
     name: 'Home',
     component: HomePage

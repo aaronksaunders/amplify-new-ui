@@ -20,13 +20,27 @@ import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
 
+import { createPinia } from 'pinia';
+
+import {
+  applyPolyfills,
+  defineCustomElements,
+} from '@aws-amplify/ui-components/loader';
+
 /* Theme variables */
 import './theme/variables.css';
 
+const pina = createPinia();
 const app = createApp(App)
   .use(IonicVue)
   .use(router);
-  
-router.isReady().then(() => {
-  app.mount('#app');
+
+applyPolyfills().then(() => {
+  defineCustomElements(window);
 });
+
+router.isReady().then(() => {
+  app.config.isCustomElement = (tag) => tag.startsWith('amplify-');
+  app.use(pina).mount('#app');
+});
+
