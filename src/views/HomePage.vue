@@ -1,5 +1,5 @@
 <template  v-slot="{ user, signOut }" >
-  <ion-page >
+  <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-title>Blank</ion-title>
@@ -8,7 +8,16 @@
 
     <ion-content :fullscreen="true">
       <strong>Ready to create an app?</strong>
-       <amplify-s3-album />
+      <!-- <amplify-s3-album /> -->
+
+      <div >
+        <div v-for="(item, index) in results" :key="index" style="display: flex; flex: 1; margin: 30px; justify-content: center;">
+          <div  style="--width:300px; margin: 12px; ">
+            <amplify-s3-image :img-key="item.key" />
+          </div>
+        </div>
+      </div>
+
       <ion-button @click="doSignOut()">SIGN OUT</ion-button>
     </ion-content>
   </ion-page>
@@ -16,7 +25,8 @@
 
 <script lang="ts">
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonButton } from '@ionic/vue';
-import { defineComponent } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
+import { Storage } from 'aws-amplify';
 import { useRouter } from 'vue-router';
 import { useAuthenticator } from '@aws-amplify/ui-vue';
 
@@ -29,9 +39,15 @@ export default defineComponent({
     IonToolbar,
     IonButton
   },
-  setup(x, y) {
+  setup() {
     const router = useRouter();
     const { send } = useAuthenticator();
+    const results = ref<any>([])
+
+    onMounted(async () => {
+      results.value = await Storage.list("");
+      console.log("called onMounted", results);
+    })
 
     /**
      * 
@@ -40,7 +56,8 @@ export default defineComponent({
       send('SIGN_OUT');
     }
     return {
-      doSignOut
+      doSignOut,
+      results
     }
   }
 });
@@ -71,5 +88,10 @@ export default defineComponent({
 
 #container a {
   text-decoration: none;
+}
+
+amplify-s3-image img {
+  height: 40px;
+  width: 40px;
 }
 </style>
